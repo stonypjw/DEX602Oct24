@@ -1,7 +1,9 @@
 <template>
     <lightning-card title="Parent Component">
         <p>This the parent</p>
-        <c-child-component child-name="Peter"></c-child-component>
-        <c-child-component child-name="Theresa"></c-child-component> 
+        <lightning-button title="Show Family Name" label="Show Family Name" onclick={showFamilyName}>
+        </lightning-button>
+        <c-child-component child-name="Peter" family-name="White" show-family={showFamily}></c-child-component>
+        <c-child-component child-name="Theresa" family-name="White"></c-child-component> 
     </lightning-card>
 </template>

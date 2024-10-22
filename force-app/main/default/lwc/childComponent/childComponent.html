@@ -1,6 +1,9 @@
 <template>
     <lightning-card title="Child Component">
         <p>My name is {childName}.</p>
+        <template lwc:if={showFamily}>
+            <p>My family name is: {familyName}</p>
+        </template>
     </lightning-card>
     
 </template>

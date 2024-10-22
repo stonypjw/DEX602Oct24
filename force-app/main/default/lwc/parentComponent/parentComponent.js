@@ -2,6 +2,12 @@ import { LightningElement } from 'lwc';
 
 export default class ParentComponent extends LightningElement {
 
+    showFamily = false;
+
+    showFamilyName(){
+        this.showFamily = !this.showFamily;
+    }
+
     constructor(){
         super();
         console.log('Parent Component.... Constructor Event Fired');
