@@ -1,0 +1,22 @@
+<template>
+    <div class="slds-grid">
+        <div class="slds-col">
+            This will be where the filter goes
+        </div>
+
+    </div>
+    <template lwc:if={recordsToDisplay}>
+        <template for:each={displayedOpps} for:item="opp">
+            <div key={opp.Id}>
+                <c-opp-card name={opp.Name}
+                            amount={opp.Amount}
+                            stage={opp.StageName}
+                            close-date={opp.CloseDate}>
+                        </c-opp-card>
+            </div>
+        </template>
+    </template>
+    <template lwc:else>
+        <p>No records to display...</p>
+    </template>
+</template>
