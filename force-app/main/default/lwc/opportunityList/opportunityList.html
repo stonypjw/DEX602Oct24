@@ -8,7 +8,24 @@
                onchange={handleChange}
                variant="label-hidden"></lightning-combobox>
         </div>
+    </div>
+    <div class="slds-tile slds-m-top_small slds-m-bottom_small">
+        <div class="slds-tile__detail">
+            <dl class="slds-list_horizontal slds-wrap">
+                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Total Records">
+                    Total Records:
+                </dt>
+                <dd class="slds-item_detail slds-truncate" title={totalRecords}>{totalRecords}</dd>
+                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Total Amount">
+                    Total Amount:
+                </dt>
+                <dd class="slds-item_detail slds-truncate" title={totalAmount}>
+                    <lightning-formatted-number value={totalAmount} format-style="currency"></lightning-formatted-number>
+                </dd>
 
+                    
+            </dl>
+        </div>
     </div>
     <template lwc:if={recordsToDisplay}>
         <template for:each={displayedOpps} for:item="opp">
