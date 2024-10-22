@@ -1,7 +1,7 @@
 <template>
     <lightning-card title="Parent Component">
         <p>This the parent</p>
-        <h1>Most recent message from children: {recentSpeak}</h1>
+        <h1>{recentName} just said: {recentSpeak}</h1>
         <lightning-button title="Show Family Name" label="Show Family Name" onclick={showFamilyName}>
         </lightning-button>
         <c-child-component onspeak={handleSpeak} child-name="Peter" family-name="White" show-family={showFamily}></c-child-component>

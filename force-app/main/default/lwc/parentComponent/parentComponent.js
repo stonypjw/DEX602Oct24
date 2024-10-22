@@ -4,6 +4,7 @@ export default class ParentComponent extends LightningElement {
 
     showFamily = false;
     recentSpeak;
+    recentName;
 
     showFamilyName(){
         this.showFamily = !this.showFamily;
@@ -23,6 +24,7 @@ export default class ParentComponent extends LightningElement {
     }
 
     handleSpeak(event){
-        this.recentSpeak = event.detail;
+        this.recentSpeak = event.detail.message;
+        this.recentName = event.detail.name;
     }
 }
