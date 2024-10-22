@@ -1,7 +1,12 @@
 <template>
     <div class="slds-grid">
         <div class="slds-col">
-            This will be where the filter goes
+            <lightning-combobox
+               label="Stage Filter"
+               value={status}
+               options={comboOptions}
+               onchange={handleChange}
+               variant="label-hidden"></lightning-combobox>
         </div>
 
     </div>
