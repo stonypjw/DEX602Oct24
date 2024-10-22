@@ -3,6 +3,7 @@ import { LightningElement } from 'lwc';
 export default class ParentComponent extends LightningElement {
 
     showFamily = false;
+    recentSpeak;
 
     showFamilyName(){
         this.showFamily = !this.showFamily;
@@ -19,5 +20,9 @@ export default class ParentComponent extends LightningElement {
 
     renderedCallback(){
         console.log('Parent Component.... RenderedCallback Event Fired');
+    }
+
+    handleSpeak(event){
+        this.recentSpeak = event.detail;
     }
 }

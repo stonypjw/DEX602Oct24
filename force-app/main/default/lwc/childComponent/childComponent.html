@@ -4,6 +4,10 @@
         <template lwc:if={showFamily}>
             <p>My family name is: {familyName}</p>
         </template>
-    </lightning-card>
+        <lightning-input type="text" label="Talk to parent"
+                                    value={childSpeak}
+                                    onchange={respondToParent}>
+        </lightning-input>
+        </lightning-card>
     
 </template>

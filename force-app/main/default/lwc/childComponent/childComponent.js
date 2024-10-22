@@ -6,6 +6,15 @@ export default class ChildComponent extends LightningElement {
     @api familyName;
     @api showFamily;
 
+    childSpeak;
+
+    respondToParent(event) {
+        this.childSpeak = event.detail.value;
+        const myEvent =
+              new CustomEvent('speak', { detail: this.childSpeak });
+        this.dispatchEvent(myEvent);
+    }
+
     constructor(){
         super();
         console.log('Child Component.... Constructor Event Fired');
