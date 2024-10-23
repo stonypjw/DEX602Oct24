@@ -37,6 +37,8 @@ export default class OppCard extends NavigationMixin(LightningElement) {
                     mode: 'dissmissible'
                 });
                 this.dispatchEvent(successToast);
+                const saveEvent = new CustomEvent('modsaved');
+                this.dispatchEvent(saveEvent);
             }
         });
     }

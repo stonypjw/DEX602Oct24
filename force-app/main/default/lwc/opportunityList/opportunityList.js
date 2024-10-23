@@ -1,5 +1,6 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import getOpportunities from '@salesforce/apex/OpportunityController.getOpportunities';
+import { refreshApex } from '@salesforce/apex';
 
 export default class OpportunityList extends LightningElement {
 
@@ -79,5 +80,9 @@ export default class OpportunityList extends LightningElement {
      handleChange(event) {
         this.status = event.detail.value;
         this.updateList();
+     }
+
+     refreshList(){
+        refreshApex(this.results);
      }
 }
