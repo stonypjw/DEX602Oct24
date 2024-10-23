@@ -8,6 +8,8 @@ import OPP_NAME_FIELD from '@salesforce/schema/Opportunity.Name';
 import OPP_AMOUNT_FIELD from '@salesforce/schema/Opportunity.Amount';
 import OPP_STAGE_FIELD from '@salesforce/schema/Opportunity.StageName';
 import OPP_CLOSEDATE_FIELD from '@salesforce/schema/Opportunity.CloseDate';
+import { updateRecord } from 'lightning/uiRecordApi';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 
 export default class OpportunityList extends LightningElement {
@@ -25,6 +27,7 @@ export default class OpportunityList extends LightningElement {
      subscription = {};
      displayModeValue = 'Card';
      tableMode = false;
+     draftValues = [];
 
      displayOptions = [
         {value: 'Card', label: 'Card' },
@@ -32,10 +35,10 @@ export default class OpportunityList extends LightningElement {
      ];
 
      tableCols = [
-        {label: 'Opportunity Name', fieldName: OPP_NAME_FIELD.fieldApiName, type: 'text'},
-        {label: 'Amount', fieldName: OPP_AMOUNT_FIELD.fieldApiName, type: 'currency'},
+        {label: 'Opportunity Name', fieldName: OPP_NAME_FIELD.fieldApiName,  sortable: true, type: 'text'},
+        {label: 'Amount', fieldName: OPP_AMOUNT_FIELD.fieldApiName, editable: true, type: 'currency'},
         {label: 'Stage', fieldName: OPP_STAGE_FIELD.fieldApiName, type: 'text'},
-        {label: 'Close Date', fieldName: OPP_CLOSEDATE_FIELD.fieldApiName, type: 'date'},
+        {label: 'Close Date', fieldName: OPP_CLOSEDATE_FIELD.fieldApiName, editable: true, type: 'date'},
      ];
 
      @track comboOptions = [
@@ -159,4 +162,40 @@ export default class OpportunityList extends LightningElement {
         this.tableMode = !this.tableMode;
         this.displayModeValue = event.detail.value;
      }
+
+     handleTableSave(event){
+        this.draftValues = event.detail.draftValues;
+        console.log('Draft Values: '+this.draftValues);
+        const inputItems = this.draftValues.slice().map(draft => {
+            var fields = Object.assign({}, draft);
+            return { fields };
+     });
+
+        console.log('Input Items: '+JSON.stringify(inputItems));
+
+        const promises = inputItems.map(recordInput => updateRecord(recordInput));
+    
+        Promise.all(promises)
+           .then (result => {
+             this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Success',
+                    message: 'All records have been updated',
+                    variant: 'success'
+                })
+             );
+           })
+           .catch( error => {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Failure',
+                    message: 'There were problems updating records',
+                    variant: 'error'
+                })
+             );
+           })
+           .finally(() => {
+            this.draftValues = [];
+           });
+    }
 }
