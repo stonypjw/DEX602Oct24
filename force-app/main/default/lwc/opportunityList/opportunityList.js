@@ -4,6 +4,11 @@ import { refreshApex } from '@salesforce/apex';
 import { getPicklistValues } from 'lightning/uiObjectInfoApi';
 import STAGE_FIELD from '@salesforce/schema/Opportunity.StageName';
 import { subscribe, unsubscribe } from 'lightning/empApi';
+import OPP_NAME_FIELD from '@salesforce/schema/Opportunity.Name';
+import OPP_AMOUNT_FIELD from '@salesforce/schema/Opportunity.Amount';
+import OPP_STAGE_FIELD from '@salesforce/schema/Opportunity.StageName';
+import OPP_CLOSEDATE_FIELD from '@salesforce/schema/Opportunity.CloseDate';
+
 
 export default class OpportunityList extends LightningElement {
 
@@ -24,6 +29,13 @@ export default class OpportunityList extends LightningElement {
      displayOptions = [
         {value: 'Card', label: 'Card' },
         {value: 'Table', label: 'Table' }
+     ];
+
+     tableCols = [
+        {label: 'Opportunity Name', fieldName: OPP_NAME_FIELD.fieldApiName, type: 'text'},
+        {label: 'Amount', fieldName: OPP_AMOUNT_FIELD.fieldApiName, type: 'currency'},
+        {label: 'Stage', fieldName: OPP_STAGE_FIELD.fieldApiName, type: 'text'},
+        {label: 'Close Date', fieldName: OPP_CLOSEDATE_FIELD.fieldApiName, type: 'date'},
      ];
 
      @track comboOptions = [

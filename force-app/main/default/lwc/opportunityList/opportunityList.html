@@ -38,7 +38,10 @@
     </div>
     <template lwc:if={recordsToDisplay}>
         <template lwc:if={tableMode}>
-            <p>Show table</p>
+            <div class="slds-border_top slds-border_bottom slds-border_left slds-border_right">
+            <lightning-datatable data={displayedOpps} key-field="Id" columns={tableCols}
+                                hide-checkbox-column></lightning-datatable>    
+            </div>
         </template>
         <template lwc:else>
             <template for:each={displayedOpps} for:item="opp">
