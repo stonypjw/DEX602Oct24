@@ -20,7 +20,6 @@ export default class OpportunityList extends NavigationMixin(LightningElement) {
      recordsToDisplay = false;
      displayedOpps = [];
      allOpps = [];
-     oppCopy = [];
      results;
      status = 'All';
      totalRecords;
@@ -93,7 +92,7 @@ export default class OpportunityList extends NavigationMixin(LightningElement) {
                 .then(url => {
                     currentOpp.oppLink = url;
                 });
-                return this.allOpps;
+                return currentOpp;
             });
 
             this.updateList();
