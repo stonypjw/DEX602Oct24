@@ -3,6 +3,7 @@ import getOpportunities from '@salesforce/apex/OpportunityController.getOpportun
 import { refreshApex } from '@salesforce/apex';
 import { getPicklistValues } from 'lightning/uiObjectInfoApi';
 import STAGE_FIELD from '@salesforce/schema/Opportunity.StageName';
+import { subscribe, unsubscribe } from 'lightning/empApi';
 
 export default class OpportunityList extends LightningElement {
 
@@ -15,6 +16,8 @@ export default class OpportunityList extends LightningElement {
      status = 'All';
      totalRecords;
      totalAmount;
+     channelName = '/topic/Opportunities';
+     subscription = {};
 
      @track comboOptions = [
         {value: 'All', label: 'All' },
@@ -49,6 +52,35 @@ export default class OpportunityList extends LightningElement {
             this.recordsToDisplay = false;
             console.error('Error occured retrieving opp records');
         }
+     }
+
+     connectedCallback(){
+        this.handleSubscribe();
+     }
+
+     disconnectedCallback(){
+        this.handleUnsubscribe();
+     }
+
+     handleSubscribe(){
+        const messageCallback = response => {
+            if(response.data.event.type === 'deleted'){
+                if(this.allOpps.find(elem => {return elem.Id === response.data.sobject.Id})){
+                    this.refreshList();
+                }
+            }
+            else{
+                if(response.data.sobject.AccountId === this.recordId){
+                this.refreshList();
+                }
+            }
+        }
+        subscribe(this.channelName, -1, messageCallback)
+             .then(response => { this.subscription = response});
+     }
+
+     handleUnsubscribe(){
+        unsubscribe(this.subscription, response => { console.log('Opp List unsubscribed from Push Topic...')});
      }
 
      updateList(){
