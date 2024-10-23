@@ -6,4 +6,14 @@ export default class OpportunityRecordForm extends LightningElement {
     @api objectApiName = 'Opportunity';
     @api layoutType = 'Compact';
     @api formMode = 'readonly';
+
+    handleCancel(){
+        const cancelEvent = new CustomEvent('cancel');
+        this.dispatchEvent(cancelEvent);
+    }
+
+    handleSave(){
+        const saveEvent = new CustomEvent('save');
+        this.dispatchEvent(saveEvent);
+    }
 }
