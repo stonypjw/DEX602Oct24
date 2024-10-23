@@ -8,6 +8,15 @@
                onchange={handleChange}
                variant="label-hidden"></lightning-combobox>
         </div>
+        <div class="slds-col">
+            <lightning-radio-group name="displayMode"
+                          label="Radio Group"
+                          options={displayOptions}
+                          value={displayModeValue}
+                          type="button"
+                          onchange={handleDisplayChange}
+                          variant="label-hidden"></lightning-radio-group>
+        </div>
     </div>
     <div class="slds-tile slds-m-top_small slds-m-bottom_small">
         <div class="slds-tile__detail">
@@ -28,18 +37,25 @@
         </div>
     </div>
     <template lwc:if={recordsToDisplay}>
-        <template for:each={displayedOpps} for:item="opp">
-            <div key={opp.Id}>
-                <c-opp-card name={opp.Name}
-                            amount={opp.Amount}
-                            stage={opp.StageName}
-                            close-date={opp.CloseDate}
-                            opp-id={opp.Id}
-                            onmodsaved={refreshList}>
-                        </c-opp-card>
-            </div>
+        <template lwc:if={tableMode}>
+            <p>Show table</p>
         </template>
+        <template lwc:else>
+            <template for:each={displayedOpps} for:item="opp">
+                <div key={opp.Id}>
+                    <c-opp-card name={opp.Name}
+                                amount={opp.Amount}
+                                stage={opp.StageName}
+                                close-date={opp.CloseDate}
+                                opp-id={opp.Id}
+                                onmodsaved={refreshList}>
+                            </c-opp-card>
+                </div>
+            </template>
+        </template>
+
     </template>
+
     <template lwc:else>
         <p>No records to display...</p>
     </template>

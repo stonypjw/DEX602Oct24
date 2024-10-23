@@ -18,6 +18,13 @@ export default class OpportunityList extends LightningElement {
      totalAmount;
      channelName = '/topic/Opportunities';
      subscription = {};
+     displayModeValue = 'Card';
+     tableMode = false;
+
+     displayOptions = [
+        {value: 'Card', label: 'Card' },
+        {value: 'Table', label: 'Table' }
+     ];
 
      @track comboOptions = [
         {value: 'All', label: 'All' },
@@ -134,5 +141,10 @@ export default class OpportunityList extends LightningElement {
 
      refreshList(){
         refreshApex(this.results);
+     }
+
+     handleDisplayChange(event){
+        this.tableMode = !this.tableMode;
+        this.displayModeValue = event.detail.value;
      }
 }
