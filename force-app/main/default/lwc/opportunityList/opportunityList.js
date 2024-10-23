@@ -10,15 +10,17 @@ import OPP_STAGE_FIELD from '@salesforce/schema/Opportunity.StageName';
 import OPP_CLOSEDATE_FIELD from '@salesforce/schema/Opportunity.CloseDate';
 import { updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { NavigationMixin } from 'lightning/navigation';
+import RecordModal from 'c/recordModal';
 
-
-export default class OpportunityList extends LightningElement {
+export default class OpportunityList extends NavigationMixin(LightningElement) {
 
      @api recordId;
 
      recordsToDisplay = false;
      displayedOpps = [];
      allOpps = [];
+     oppCopy = [];
      results;
      status = 'All';
      totalRecords;
@@ -35,10 +37,21 @@ export default class OpportunityList extends LightningElement {
      ];
 
      tableCols = [
-        {label: 'Opportunity Name', fieldName: OPP_NAME_FIELD.fieldApiName,  sortable: true, type: 'text'},
+        {label: 'Opportunity Name', fieldName: 'oppLink',  sortable: true, type: 'url', 
+            typeAttributes: {
+                label: {fieldName: 'Name' },
+                target: '_blank'}
+            },
         {label: 'Amount', fieldName: OPP_AMOUNT_FIELD.fieldApiName, editable: true, type: 'currency'},
         {label: 'Stage', fieldName: OPP_STAGE_FIELD.fieldApiName, type: 'text'},
         {label: 'Close Date', fieldName: OPP_CLOSEDATE_FIELD.fieldApiName, editable: true, type: 'date'},
+        {label: 'Edit', type: 'button-icon', 
+            typeAttributes:{
+                iconName: 'utility:edit',
+                name: 'openModal',
+                title: 'Edit Record',
+                variant: 'border-filled'
+            }}
      ];
 
      @track comboOptions = [
@@ -67,7 +80,22 @@ export default class OpportunityList extends LightningElement {
         this.results = oppRecords;
 
         if(this.results.data){
-            this.allOpps = this.results.data;
+    
+            this.allOpps = this.results.data.map(opp => {
+                let currentOpp = { ...opp };
+                this[NavigationMixin.GenerateUrl]({
+                    type: 'standard__recordPage',
+                    attributes: {
+                        recordId: currentOpp.Id,
+                        actionName: 'view'
+                    }
+                })
+                .then(url => {
+                    currentOpp.oppLink = url;
+                });
+                return this.allOpps;
+            });
+
             this.updateList();
         }
         if(this.results.error){
@@ -197,5 +225,35 @@ export default class OpportunityList extends LightningElement {
            .finally(() => {
             this.draftValues = [];
            });
+        }
+
+        handleRowAction(event){
+            const actionName = event.detail.action.name;
+            const row = event.detail.row;
+
+            switch (actionName){
+                case 'openModal':
+                    RecordModal.open({
+                        size: 'small',
+                        recordId: row.Id,
+                        objectApiName: 'Opportunity',
+                        headerLabel: 'Edit Opportunity'
+                    })
+                    .then((result) => {
+                        console.log(result);
+                        if(result==='modsave'){
+                            const successToast = new ShowToastEvent({
+                                title: 'Opportunity Has Been Updated Successfully',
+                                message: 'Your record has been updated',
+                                variant: 'success',
+                                mode: 'dissmissible'
+                            });
+                            this.dispatchEvent(successToast);
+                            const saveEvent = new CustomEvent('modsaved');
+                            this.dispatchEvent(saveEvent);
+                        }
+                    });
+                    break;
+            }
+        }
     }
-}
