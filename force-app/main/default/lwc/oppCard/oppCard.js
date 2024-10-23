@@ -1,6 +1,7 @@
 import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import RecordModal from 'c/recordModal';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class OppCard extends NavigationMixin(LightningElement) {
     @api name;
@@ -28,6 +29,15 @@ export default class OppCard extends NavigationMixin(LightningElement) {
         })
         .then((result) => {
             console.log(result);
+            if(result==='modsave'){
+                const successToast = new ShowToastEvent({
+                    title: 'Opportunity Has Been Updated Successfully',
+                    message: 'Your record has been updated',
+                    variant: 'success',
+                    mode: 'dissmissible'
+                });
+                this.dispatchEvent(successToast);
+            }
         });
     }
 }
