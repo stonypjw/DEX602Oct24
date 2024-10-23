@@ -1,6 +1,8 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import getOpportunities from '@salesforce/apex/OpportunityController.getOpportunities';
 import { refreshApex } from '@salesforce/apex';
+import { getPicklistValues } from 'lightning/uiObjectInfoApi';
+import STAGE_FIELD from '@salesforce/schema/Opportunity.StageName';
 
 export default class OpportunityList extends LightningElement {
 
@@ -17,10 +19,23 @@ export default class OpportunityList extends LightningElement {
      @track comboOptions = [
         {value: 'All', label: 'All' },
         {value: 'Open', label: 'All Open' },
-        {value: 'Closed', label: 'All Closed' },
-        {value: 'ClosedWon', label: 'All Won' },
-        {value: 'ClosedLost', label: 'All Lost' },
+        {value: 'Closed', label: 'All Closed' }
+       // {value: 'ClosedWon', label: 'All Won' },
+       // {value: 'ClosedLost', label: 'All Lost' },
      ];
+
+     @wire(getPicklistValues, { recordTypeId: '012000000000000AAA', fieldApiName: STAGE_FIELD})
+     wiredPicklist({ data, error }) {
+        if (data) {
+            for (let item of data.values) {
+                this.comboOptions.push({value: item.value, label: item.label});
+            }
+            this.comboOptions = this.comboOptions.slice();
+        }
+        if (error) {
+            console.error('Error occured retrieving picklist values....');
+        }
+     }
 
      @wire(getOpportunities, { accountId: '$recordId'})
      wiredOpps(oppRecords){
@@ -57,16 +72,19 @@ export default class OpportunityList extends LightningElement {
                         this.displayedOpps.push(currentRecord);
                     }
                 }
-                else if(this.status === 'ClosedWon'){
+              /*  else if(this.status === 'ClosedWon'){
                     if(currentRecord.IsWon){
                         this.displayedOpps.push(currentRecord);
                     } 
-                }
+                } 
                 else if(this.status === 'ClosedLost'){
                     if(!currentRecord.IsWon && currentRecord.IsClosed){
                         this.displayedOpps.push(currentRecord);
                     } 
-                }
+                }*/
+               else if (this.status === currentRecord.StageName){
+                this.displayedOpps.push(currentRecord);
+               }
             }
         }
         this.recordsToDisplay = this.displayedOpps.length > 0 ? true : false;

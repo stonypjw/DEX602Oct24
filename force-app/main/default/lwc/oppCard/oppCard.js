@@ -11,6 +11,7 @@ export default class OppCard extends NavigationMixin(LightningElement) {
     @api oppId;
 
     viewRecord(){
+        console.log('RecordID is: '+this.oppId);
         this[NavigationMixin.Navigate]({
             type: 'standard__recordPage',
             attributes: {
