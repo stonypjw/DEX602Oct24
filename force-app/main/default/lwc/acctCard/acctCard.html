@@ -1,0 +1,27 @@
+<template>
+    <lightning-card>
+        <h3 slot="title" class="slds-tile__title slds-truncate"
+        title={acctName}>{acctName}</h3>
+    <div class="slds-tile">
+        <div class="slds-tile__detail">
+            <dl class="slds-list_horizontal slds-wrap">
+                <dt class="slds-item_label slds-text-color_weak slds-truncate"
+                    title="Acct Number">Account Number:</dt>
+                <dd class="slds-item_detail slds-truncate" title={acctNum}>{acctNum}</dd>
+                <dt class="slds-item_label slds-text-color_weak slds-truncate"
+                    title="Annual Revenue">Annual Revenue:</dt>
+                <dd class="slds-item_detail slds-truncate" title={annualRevenue}>
+                    <lightning-formatted-number value={annualRevenue} format-style="currency"></lightning-formatted-number> </dd>
+                    <dt class="slds-item_label slds-text-color_weak slds-truncate"
+                    title="Main Phone">Main Phone:</dt>
+                <dd class="slds-item_detail slds-truncate" title={acctPhone}>
+                    <lightning-formatted-phone value={acctPhone}></lightning-formatted-phone></dd>
+                    <dt class="slds-item_label slds-text-color_weak slds-truncate"
+                    title="Website">Website:</dt>
+                <dd class="slds-item_detail slds-truncate" title={acctWebsite}>
+                    <lightning-formatted-url value={acctWebsite} target="_blank"></lightning-formatted-url></dd>
+                </dl>
+        </div>
+    </div>
+    </lightning-card>
+</template>
