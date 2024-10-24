@@ -11,11 +11,14 @@ export default class AcctList extends LightningElement {
 
     @wire(getAccounts) wiredAccts(acctRecords){
         console.log(acctRecords);
-        this.displayedAccts = acctRecords.data;
-        //console.log(this.displayedAccts[0]);
-        //this.selectedId = this.displayedAccts[0].Id;
-        //this.selectedAcctName = this.displayedAccts[0].Name;
-      //  this.sendMessageService(this.selectedId,this.selectedAcctName); 
+        if(acctRecords.data){
+            this.displayedAccts = acctRecords.data;
+            console.log(this.displayedAccts[0]);
+            this.selectedId = this.displayedAccts[0].Id;
+            this.selectedAcctName = this.displayedAccts[0].Name;
+           this.sendMessageService(this.selectedId,this.selectedAcctName);
+        }
+        
     };
 
     @wire(MessageContext)
