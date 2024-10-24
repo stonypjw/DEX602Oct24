@@ -1,11 +1,13 @@
 <template>
     <template for:each={displayedAccts} for:item="acc">
         <div key={acc.Id}>
-        <c-acct-card acct-name={acc.Name}
+        <c-acct-card acct-id={acc.Id}
+                    acct-name={acc.Name}
                         acct-num={acc.AccountNumber}
                         annual-revenue={acc.AnnualRevenue}
                         acct-phone={acc.Phone}
-                        acct-website={acc.Website}>
+                        acct-website={acc.Website}
+                        onselected={handleSelection}>
                     </c-acct-card>
         </div>
     </template> 
