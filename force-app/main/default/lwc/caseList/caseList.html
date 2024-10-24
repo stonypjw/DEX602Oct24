@@ -1,0 +1,13 @@
+<template>
+    <template for:each={displayedCases} for:item="cas">
+        <div key={cas.fields.Id.value}>
+            <c-case-card case-id={cas.fields.Id.value}
+                        case-number={cas.fields.CaseNumber.value}
+                        case-subject={cas.fields.Subject.value}
+                        case-priority={cas.fields.Priority.value}
+                        case-status={cas.fields.Status.value}
+                        >
+                    </c-case-card>
+        </div>
+    </template>
+</template>

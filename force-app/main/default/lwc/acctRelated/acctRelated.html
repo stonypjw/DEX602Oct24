@@ -1,0 +1,12 @@
+<template>
+    <lightning-card>
+    <lightning-accordion>
+        <lightning-accordion-section name="Opportunities" label={oppsLabel}>
+            <c-opportunity-list record-id={selectedId}></c-opportunity-list>
+        </lightning-accordion-section>
+        <lightning-accordion-section name="Cases" label="Cases">
+            <c-case-list selected-id={selectedId}></c-case-list>
+        </lightning-accordion-section>
+    </lightning-accordion>
+</lightning-card>
+</template>
