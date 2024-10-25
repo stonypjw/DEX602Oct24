@@ -2,7 +2,7 @@ import { LightningElement, track, wire } from 'lwc';
 import getAccounts from '@salesforce/apex/AccountController.getAccounts';
 import AccountMC from '@salesforce/messageChannel/AccountMessageChannel__c';
 import {publish, MessageContext } from 'lightning/messageService';
-import { getListInfosByObjectName } from 'lightning/uiListsApi';
+import { getListInfosByObjectName,  getListRecordsByName  } from 'lightning/uiListsApi';
 
 export default class AcctList extends LightningElement {
 
@@ -10,7 +10,7 @@ export default class AcctList extends LightningElement {
     selectedId;
     selectedAcctName;
     @track accListViews = [];
-    selectedListViewId;
+    selectedListViewApiName = 'AllAccounts';
 
     @wire(getListInfosByObjectName, {
         objectApiName: 'Account',
@@ -22,7 +22,7 @@ export default class AcctList extends LightningElement {
             console.log(data);
             this.accListViews = 
                data.lists.map(list => ({
-                value: list.id,
+                value: list.apiName,
                 label: list.label
                }));
         }
@@ -30,7 +30,7 @@ export default class AcctList extends LightningElement {
             console.error(error);
         }
       };
-
+/*
     @wire(getAccounts) wiredAccts(acctRecords){
         console.log(acctRecords);
         if(acctRecords.data){
@@ -41,19 +41,39 @@ export default class AcctList extends LightningElement {
            this.sendMessageService(this.selectedId,this.selectedAcctName);
         }
         
-    };
+    }; */
+
+    @wire(getListRecordsByName, {
+        objectApiName:'Account',
+        listViewApiName: '$selectedListViewApiName',
+        fields: ["Account.Name", "Account.AccountNumber", "Account.Id", "Account.AnnualRevenue", "Account.Phone", "Account.Website"],
+        sortBy: ["Account.Name"],
+      })
+      returnedAccounts({ error, data }) {
+        if(data){
+            console.log(data);
+            this.displayedAccts = data.records;
+            console.log('****Account First****');
+            console.log(this.displayedAccts[0]);
+            console.log(this.displayedAccts[0].fields.Id.value);
+
+            this.selectedId = this.displayedAccts[0].fields.Id.value;
+            this.selectedAcctName = this.displayedAccts[0].fields.Name.value;
+           this.sendMessageService(this.selectedId,this.selectedAcctName);
+        }
+      }
 
     @wire(MessageContext)
     messageContext;
 
     handleSelection(event){
         console.log('Selected Event Detected By AcctList');
-        this.displayedAccts = this.displayedAccts.slice();
+        
         this.selectedId = event.detail.prop1;
         this.selectedAcctName = event.detail.prop2;
         console.log('AccountId: '+this.selectedId);
         console.log('AccountName: '+this.selectedAcctName);
-
+        this.displayedAccts = [...this.displayedAccts];
         this.sendMessageService(this.selectedId,this.selectedAcctName);
     }
 
@@ -63,7 +83,7 @@ export default class AcctList extends LightningElement {
     }
 
     changeList(event){
-        this.selectedListViewId = event.detail.value;
-        console.log('NewId:'+this.selectedListViewId);
+        this.selectedListViewApiName = event.detail.value;
+        console.log('NewAPIName:'+this.selectedListViewApiName);
     }
 }
