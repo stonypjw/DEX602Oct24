@@ -1,0 +1,7 @@
+.slds-card {
+    background-color: white;
+}
+
+.slds-card-selected {
+    background-color: greenyellow;
+}

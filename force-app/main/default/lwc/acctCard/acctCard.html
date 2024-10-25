@@ -1,5 +1,6 @@
 <template>
-    <lightning-card>
+    
+    <lightning-card class={cardClass}>
         <h3 slot="title" class="slds-tile__title slds-truncate"
         title={acctName}><a onclick={dispatchAccId}>{acctName}</a></h3>
     <div class="slds-tile">
@@ -47,4 +48,5 @@
                         size="x-small" onclick={displayContacts}></lightning-icon>
     </div>
     </lightning-card>
+
 </template>
