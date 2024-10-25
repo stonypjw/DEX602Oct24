@@ -1,5 +1,7 @@
 import { LightningElement, api } from 'lwc';
 import getContactList from '@salesforce/apex/ContactController.getContactList';
+import creditCheckAPI from '@salesforce/apexContinuation/CreditCheck.creditCheckAPI';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class AcctCard extends LightningElement {
 
@@ -15,6 +17,8 @@ export default class AcctCard extends LightningElement {
     showContacts = false;
     contacts;
     cardClass = 'slds-card';
+
+    creditObj = {};
 
     dispatchAccId(){
         console.log('AcctCard Clicked');
@@ -55,6 +59,29 @@ export default class AcctCard extends LightningElement {
         }
     }
 
+    checkCredit(){
+        creditCheckAPI({ accountId: this.acctId })
+            .then ( response => {
+                console.log(response);
+                this.creditObj = JSON.parse(response);
+                console.log(this.creditObj.Company_Name__c);
 
+                var toastMessage = 'Credit check approved for '+ this.creditObj.Company_Name__c;
+
+                const toastEvent = new ShowToastEvent({
+                    title: 'Credit Check Completed',
+                    message: toastMessage,
+                    variant: 'success',
+                    mode: 'sticky'
+                });
+                this.dispatchEvent(toastEvent);
+            })
+            .catch( error => {
+                console.error(JSON.stringify(error));
+            })
+            .finally(() => {
+                console.log('Finished credit check');
+            });
+    }
 
 }
