@@ -1,8 +1,9 @@
 <template>
     
-    <lightning-card class={cardClass}>
+    <lightning-card>
         <h3 slot="title" class="slds-tile__title slds-truncate"
         title={acctName}><a onclick={dispatchAccId}>{acctName}</a></h3>
+        <div class={cardClass}>
     <div class="slds-tile">
         <div class="slds-tile__detail">
             <dl class="slds-list_horizontal slds-wrap">
@@ -22,6 +23,7 @@
                 <dd class="slds-item_detail slds-truncate" title={acctWebsite}>
                     <lightning-formatted-url value={acctWebsite} target="_blank"></lightning-formatted-url></dd>
                 </dl>
+        </div>
         </div>
     </div>
     <template lwc:if={loadingContacts}>

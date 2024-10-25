@@ -5,7 +5,7 @@
         value={selectedListViewId}
         options={accListViews}
         onchange={changeList}
-        ></lightning-combobox>
+        ></lightning-combobox>    
     <template for:each={displayedAccts} for:item="acc">
         <div key={acc.Id}>
         <c-acct-card acct-id={acc.Id}

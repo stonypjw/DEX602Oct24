@@ -16,20 +16,26 @@ export default class AcctCard extends LightningElement {
     loadingContacts = false;
     showContacts = false;
     contacts;
-    cardClass = 'slds-card';
+    
 
     creditObj = {};
 
-    dispatchAccId(){
-        console.log('AcctCard Clicked');
-        if(this.acctId === this.selectedId) {
-            this.cardClass = 'slds-card-selected';
+    get isSelected() {
+        return this.acctId === this.selectedId;
+    }
+
+    get cardClass() {
+        console.log('IsSelected?:'+this.acctWebsiteisSelected);
+        if(this.isSelected){
+            return 'slds-card-selected';
         }
         else {
-            this.cardClass = 'slds-card'; 
+            return 'slds-card';
         }
-        console.log('Class:'+this.cardClass);
-        const selectEvent = new CustomEvent('selected', 
+    }
+    dispatchAccId(){
+        console.log('AcctCard Clicked');
+             const selectEvent = new CustomEvent('selected', 
                                { detail: {'prop1': this.acctId,
                                           'prop2': this.acctName}
                                });

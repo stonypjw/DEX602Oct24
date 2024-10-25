@@ -48,7 +48,7 @@ export default class AcctList extends LightningElement {
 
     handleSelection(event){
         console.log('Selected Event Detected By AcctList');
-        
+        this.displayedAccts = this.displayedAccts.slice();
         this.selectedId = event.detail.prop1;
         this.selectedAcctName = event.detail.prop2;
         console.log('AccountId: '+this.selectedId);
