@@ -6,7 +6,7 @@ public with sharing class CreditCheck {
         String url = 'https://steve-wasula-splx201-dev-ed.my.salesforce-sites.com/creditcheck';
 
         Continuation con = new Continuation(60);
-        con.ContinuationMethod = 'processReponse';
+        con.ContinuationMethod = 'processResponse';
         con.state = 'Hello';
 
         Account acct = [SELECT ID, Name, Owner.Email, Owner.Name 
