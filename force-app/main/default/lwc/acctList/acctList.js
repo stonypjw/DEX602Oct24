@@ -1,13 +1,39 @@
-import { LightningElement, wire } from 'lwc';
+import { LightningElement, track, wire } from 'lwc';
 import getAccounts from '@salesforce/apex/AccountController.getAccounts';
 import AccountMC from '@salesforce/messageChannel/AccountMessageChannel__c';
 import {publish, MessageContext } from 'lightning/messageService';
+import { getListInfosByObjectName } from 'lightning/uiListsApi';
+import ACCOUNT_OBJECT from '@salesforce/schema/Account';
 
 export default class AcctList extends LightningElement {
 
     displayedAccts = [];
     selectedId;
     selectedAcctName;
+    @track accListViews = [];
+    selectedListViewId;
+    
+    @wire(getListInfosByObjectName, {
+        objectApiName: ACCOUNT_OBJECT,
+        pageSize: 10
+      })
+      returnedListViews({ error, data }) {
+        console.log('****LISTVIEW DATA*****');
+            console.log(data);
+            console.log(error);
+        if(data){
+            console.log('****LISTVIEW DATA*****');
+            console.log(data);
+            this.accListViews = 
+               Object.keys(data.lists).map(id => ({
+                id: data.lists.id,
+                name: data.lists.label
+               }));
+        }
+        if(error){
+            console.error(error);
+        }
+      };
 
     @wire(getAccounts) wiredAccts(acctRecords){
         console.log(acctRecords);
