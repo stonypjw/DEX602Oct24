@@ -3,7 +3,6 @@ import getAccounts from '@salesforce/apex/AccountController.getAccounts';
 import AccountMC from '@salesforce/messageChannel/AccountMessageChannel__c';
 import {publish, MessageContext } from 'lightning/messageService';
 import { getListInfosByObjectName } from 'lightning/uiListsApi';
-import ACCOUNT_OBJECT from '@salesforce/schema/Account';
 
 export default class AcctList extends LightningElement {
 
@@ -12,22 +11,19 @@ export default class AcctList extends LightningElement {
     selectedAcctName;
     @track accListViews = [];
     selectedListViewId;
-    
+
     @wire(getListInfosByObjectName, {
-        objectApiName: ACCOUNT_OBJECT,
+        objectApiName: 'Account',
         pageSize: 10
       })
       returnedListViews({ error, data }) {
-        console.log('****LISTVIEW DATA*****');
-            console.log(data);
-            console.log(error);
         if(data){
             console.log('****LISTVIEW DATA*****');
             console.log(data);
             this.accListViews = 
-               Object.keys(data.lists).map(id => ({
-                id: data.lists.id,
-                name: data.lists.label
+               data.lists.map(list => ({
+                value: list.id,
+                label: list.label
                }));
         }
         if(error){
@@ -66,4 +62,8 @@ export default class AcctList extends LightningElement {
         publish(this.messageContext, AccountMC, { recordId: accountId, accountName: accountName});
     }
 
+    changeList(event){
+        this.selectedListViewId = event.detail.value;
+        console.log('NewId:'+this.selectedListViewId);
+    }
 }
